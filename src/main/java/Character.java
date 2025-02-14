@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 public abstract class Character { // Classe abstraite (car non instantiable) imposant un « contrat » pour les classes dérivées
     private final String BATTLE_MODE = "1";
     private final String ESCAPE_MODE = "2";
+    private final AttackManager attackManager;
     // Attributs communs à l'ensemble des classes filles
     private String name;
     private int health;
@@ -24,6 +25,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         this.name = name;
         this.health = this.maxHealth = maxHealth;
         this.experience = experience;
+        this.attackManager = new AttackManager(this);
     }
 
     /**
@@ -106,6 +108,12 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
 
     /**
+     * <p>Méthode destinée à récupérer l'attackManager du personnage </p>
+     * @return PV max du personnage
+     */
+    public AttackManager getAttackManager() { return attackManager; }
+
+    /**
      * <p>Méthode destinée à décrémenter le nombre de points d'experience du personnage </p>
      * @param points nombre de points d'experience à ajouter au personnage
      */
@@ -131,7 +139,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
     /**
      * <p>Méthode destinée à implémenter le système de combat de l'application </p>
-     * @param character - ennemi (character) qui attaque le player
+     * @param character - ennemi (character) qui attack le player
      * @param mode - mode de combat, en fonction du mode différentes actions seront réaliser par le joueur
      * @return un boolean qui permet de savoir si le combat à était gagné ou perdu par le joueur
      */
