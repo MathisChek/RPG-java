@@ -1,14 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-//import org.apache.commons.lang3.StringUtils;
 
-public class Menu {
+public abstract class BaseMenu {
     private String title;
     private ArrayList<MenuItem> items;
     private int defaultChoice;
     private int numberOfChoices = 0;
 
-    public Menu(String title, ArrayList<MenuItem> items, int defaultChoice) {
+    public BaseMenu(String title, ArrayList<MenuItem> items, int defaultChoice) {
         this.title = title;
         this.items = items;
         this.defaultChoice = defaultChoice;
@@ -18,33 +17,25 @@ public class Menu {
         this.items.sort((item1, item2) -> item1.getchoiceRank() - item2.getchoiceRank()); // Tri notre ArrayList en fonction du choiceRank
     }
 
-    public Menu(String title, ArrayList<MenuItem> items) {
+    public BaseMenu(String title, ArrayList<MenuItem> items) {
         this(title, items, 1);
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void setTitle(String title) { this.title = title;}
 
-    public ArrayList<MenuItem> getItems() {
-        return items;
-    }
+    public ArrayList<MenuItem> getItems() { return items;}
 
-    public void setItems(ArrayList<MenuItem> items) {
-        this.items = items;
-    }
+    public void setItems(ArrayList<MenuItem> items) { this.items = items; }
 
-    public int getDefaultChoice() {
-        return defaultChoice;
-    }
+    public int getDefaultChoice() { return defaultChoice; }
 
-    public void setDefaultChoice(int defaultChoice) {
-        this.defaultChoice = defaultChoice;
-    }
+    public void setDefaultChoice(int defaultChoice) { this.defaultChoice = defaultChoice; }
+
+    public int getNumberOfChoices() { return numberOfChoices; }
+
+    public void setNumberOfChoices(int numberOfChoices) { this.numberOfChoices = numberOfChoices; }
 
     public String exec(Scanner scanner) {
         int choice = -1;

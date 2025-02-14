@@ -1,6 +1,9 @@
 public class Action {
     public Boolean fight(Character player, Character enemy, Boolean isOngoing) {
         System.out.println("Battle");
+
+        AttaquesMenu attaqueMenu = new AttaquesMenu(player.attaque);
+
         int dealtDamage = player.attack() - enemy.defend();
         int takenDamage = enemy.attack() - player.defend();
 

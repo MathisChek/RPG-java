@@ -53,7 +53,14 @@ public class Main {
                 "escape"
         ));
 
-        Menu fightMenu = new Menu("choisir une action", menuItems);
+        ActionsMenu actionsMenu = new ActionsMenu("choisir une action", menuItems);
+
+        /*
+         * ********** Tests des classes Player et Enemy
+         */
+        Player player = new Player("Joueur");
+        Enemy enemy = new Enemy("Ennemi", player.getExperience());
+
 
         /*
          * ********** Tests des classes Story et Level
@@ -66,16 +73,10 @@ public class Main {
             story.nextLevel();
         }
 
-        /*
-         * ********** Tests des classes Player et Enemy
-         */
-        Player player = new Player("Joueur");
-        Enemy enemy = new Enemy("Ennemi", player.getExperience());
-
         do {
             System.out.println(player);
             System.out.println(enemy);
-            choice = fightMenu.exec(scanner);
+            choice = actionsMenu.exec(scanner);
         } while(player.fight(enemy, choice));
 
         System.out.println(player);
