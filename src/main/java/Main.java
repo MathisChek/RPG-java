@@ -61,6 +61,10 @@ public class Main {
         Player player = new Player("Joueur");
         Enemy enemy = new Enemy("Ennemi", player.getExperience());
 
+        player.getAttackManager().addAttack("Coup d'épée", new Attack("Coup d'épée", 30, player));
+        player.getAttackManager().addAttack("Coup de poing", new Attack("Coup de point", 10, player));
+
+        enemy.getAttackManager().addAttack("Coup d'épée", new Attack("Coup d'épée", 30, player));
 
         /*
          * ********** Tests des classes Story et Level

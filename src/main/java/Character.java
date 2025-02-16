@@ -14,6 +14,9 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     private int maxHealth;
     private int experience;
 
+    protected int attackSkillsNumber, defenseSkillsNumber;
+
+
     // Constructeur : définit l'état initial d'un personnage
     /**
      * <p>Méthode destinée à generer une nouvelle instance du personnage</p>
@@ -148,7 +151,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
         Action action = new Action();
         try {
-            Method method = action.getClass().getMethod(mode, Character.class, Character.class, Boolean.class);
+            Method method = action.getClass().getMethod(mode, Player.class, Enemy.class, Boolean.class);
             isOngoing = (boolean) method.invoke(action, this, character, isOngoing);
         } catch (NoSuchMethodException | SecurityException e) {
             throw new RuntimeException("Erreur d'accès à la méthode : " + mode, e);
@@ -157,17 +160,6 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         }
         return isOngoing;
     }
-
-    // Méthodes abstraites liées à l'action de « combattre »
-    /**
-     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
-     */
-    public abstract int attack();
-
-    /**
-     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
-     */
-    public abstract int defend();
 
     /**
      * <p>Méthode destinée à structurer avec un template les affichages dans le terminal</p>
@@ -180,14 +172,47 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
                 ****************************************
                 * HP : %d / %d
                 * XP : %d
-                * Compétences : %s
+                * Compétences : \n  %s
                 * Équipements : %s
                 * Position: [X:%d, Y:%d]
                 ****************************************
                 """;
 
-        String stats = String.format(statsTemplate, this.name, this.health, this.maxHealth, this.experience, "à implémenter", "à implémenter", 0, 0);
+        String stats = String.format(statsTemplate, this.name, this.health, this.maxHealth, this.experience, this.attackManager.attacks(), "à implémenter", 0, 0);
 
         return stats;
+    }
+
+    // Méthodes abstraites liées à l'action de « combattre »
+    /**
+     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
+     */
+    public int attack(Attack attack) { // Définition de l'attaque du point de vue du joueur
+        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
+        double experienceBonus = this.getExperience() / 10.0;
+        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+
+        // Pondération avec damage
+        int damage = attack.getDamage();
+        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
+
+        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
+        return (int) total;
+    }
+
+    /**
+     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
+     */
+    public int defend(Attack attack) { // Définition de la défense du point de vue de l'ennemi
+        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
+        double experienceBonus = this.getExperience() / 10.0;
+        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+
+        // Pondération avec damage
+        int damage = attack.getDamage();
+        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
+
+        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
+        return (int) total;
     }
 }

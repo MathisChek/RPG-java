@@ -1,14 +1,14 @@
 public class Action {
-    public Boolean fight(Character player, Character enemy, Boolean isOngoing) {
+    public Boolean fight(Player player, Enemy enemy, Boolean isOngoing) {
         System.out.println("Battle");
 
         AttackMenu attackMenu = new AttackMenu(player.getAttackManager());
-        String choice = attackMenu.exec(new java.util.Scanner(System.in));
+        Attack choice = attackMenu.execAttack(new java.util.Scanner(System.in));
 
-        player.getAttackManager().executeAttack(choice);
+        player.getAttackManager().executeAttack(choice.getName());
 
-        int dealtDamage = player.attack() - enemy.defend();
-        int takenDamage = enemy.attack() - player.defend();
+        int dealtDamage = player.attack(choice) - enemy.defend(choice);
+        int takenDamage = enemy.attack(choice) - player.defend(choice);
 
         if (takenDamage < 0) {
             dealtDamage -= takenDamage / 2;
@@ -32,12 +32,12 @@ public class Action {
         return isOngoing;
     }
 
-    public Boolean escape(Character player, Character enemy, Boolean isOngoing) {
+    public Boolean escape(Player player, Enemy enemy, Boolean isOngoing) {
         System.out.println("Escape");
         if (Math.random() * 10 + 1 <= 3.5) {
             isOngoing = false;
         } else {
-            int takenDamage = enemy.attack();
+            int takenDamage = enemy.attack(enemy.getRandomEnemyAttack());
             player.decreaseHealth(takenDamage);
             if (player.isDead()) {
                 isOngoing = false;

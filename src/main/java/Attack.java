@@ -16,4 +16,8 @@ public class Attack {
     public void execute() {
         System.out.println(character.getName() + " lance " + name + " et inflige " + damage + " dégâts !");
     }
+
+    public String getName() {
+        return name;
+    }
 }

@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Enemy extends Character {
     private int playerExperience;
 
@@ -26,13 +30,10 @@ public class Enemy extends Character {
         return (int) (Math.random() * ((double) experience / 4 + 2) + 1);
     }
 
-    @Override
-    public int attack() {
-        return (int) (Math.random() * ((double) playerExperience / 4 + 1) + (double) this.getExperience() / 4 + 3);
-    }
-
-    @Override
-    public int defend() {
-        return (int) (Math.random() * ((double) playerExperience / 4 + 1) + (double) this.getExperience() / 4 + 3);
+    public Attack getRandomEnemyAttack() {
+        AttackManager attackManager = this.getAttackManager();
+        ArrayList<Attack> attacks = new ArrayList<>(attackManager.getAttacks().values());
+        Random rand = new Random();
+        return attacks.get(rand.nextInt(attacks.size()));  // Choisit un index au hasard
     }
 }

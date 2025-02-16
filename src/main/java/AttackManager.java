@@ -29,7 +29,8 @@ public class AttackManager {
 
         // Affiche chaque attack avec son index et ses dégâts
         for (Map.Entry<String, Attack> entry : attacks.entrySet()) {
-            attackListe.append(String.format("[%d] %s (💥 %d dégâts)\n",
+
+            attackListe.append(String.format("  [%d] %s (💥 %d dégâts)\n",
                     index++,
                     entry.getKey(),
                     entry.getValue().getDamage())
@@ -37,15 +38,10 @@ public class AttackManager {
         }
 
         // Mise en forme
-        String menuTemplate = """
-                ****************************************
-                ***** Liste des attacks de %s
-                ****************************************
-                %s
-                ****************************************
-                """;
+        String menuTemplate = """ 
+                %s""";
 
-        return String.format(menuTemplate, character.getName(), attackListe.toString().trim());
+        return String.format(menuTemplate, attackListe.toString().trim());
     }
 
     // Méthode pour exécuter une attack par son nom

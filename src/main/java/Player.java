@@ -14,12 +14,30 @@ public class Player extends Character {
     }
 
     @Override
-    public int attack() { // Définition de l'attaque du point de vue du joueur
-        return (int) (Math.random() * ((double) this.getExperience() / 4 + attackSkillsNumber * 3 + 3) + (double) this.getExperience() / 10 + attackSkillsNumber * 2 + defenseSkillsNumber + 1);
+    public int attack(Attack attack) { // Définition de l'attaque du point de vue du joueur
+        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
+        double experienceBonus = this.getExperience() / 10.0;
+        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+
+        // Pondération avec damage
+        int damage = attack.getDamage();
+        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
+
+        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
+        return (int) total;
     }
 
     @Override
-    public int defend() { // Définition de la défense du point de vue du joueur
-        return (int) (Math.random() * ((double) this.getExperience() / 4 + defenseSkillsNumber * 3 + 3) + (double) this.getExperience() / 10 + defenseSkillsNumber * 2 + attackSkillsNumber + 1);
+    public int defend(Attack attack) { // Définition de la défense du point de vue de l'ennemi
+        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
+        double experienceBonus = this.getExperience() / 10.0;
+        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+
+        // Pondération avec damage
+        int damage = attack.getDamage();
+        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
+
+        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
+        return (int) total;
     }
 }
