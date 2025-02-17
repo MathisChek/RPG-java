@@ -2,20 +2,16 @@
 
 ## Etat d'avencement
 
-- [ ] Système de combat
-- [ ] Système de Fuite
-- [ ] Système de Menu
-- [ ] Système de Action
+- [x] Système de combat
+- [x] Système de Fuite
+- [ ] Système de Menu Action (il manque repos et inventaire)
+- [x] Système de Menu Attack
+- [ ] Système de Menu Items
+- [ ] Système d'Action
 - [ ] Système de repos
 - [ ] Système d'achats
+- [ ] La prise en compte des repos (rest) et équipements (purchase) dans la calcul des points de vie (health) et d'expérience (experience) du joueur.
 - [ ] Documentation Character
-- [ ] Documentation Enemy
-- [ ] Documentation Player
-- [ ] Documentation Action
-- [ ] Documentation Menu
-- [ ] Documentation MenuItem
-- [ ] Documentation Level
-- [ ] Documentation Story
 
 ## Diagramme de class (UML)
 
@@ -23,7 +19,8 @@
 
 ## Difficultés rencontrées et solutions adoptées
 
-A compléter
+- Ajouter des nouvelles fonctionnalités en gardant un code maintenable, scalable et générique
+  - Solution : garder en tête le paradigme Objet
 
 ## Bilan des acquis
 
