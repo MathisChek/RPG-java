@@ -2,7 +2,7 @@
 
 ## Etat d'avencement
 
-- [ ] Système de combat
+- [x] Système de combat
 - [ ] Système de Fuite
 - [ ] Système de Menu
 - [ ] Système de Action
