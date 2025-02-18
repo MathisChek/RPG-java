@@ -13,6 +13,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     private int health;
     private int maxHealth;
     private int experience;
+    private int restCount;
 
     protected int attackSkillsNumber, defenseSkillsNumber;
 
@@ -29,6 +30,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         this.health = this.maxHealth = maxHealth;
         this.experience = experience;
         this.attackManager = new AttackManager(this);
+        this.restCount = 5; // Chaque personnage peut se reposer 5 fois avant de devoir acheter des items pour se reposer ou récupérer de la vie
     }
 
     /**
@@ -109,6 +111,19 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         this.experience = experience;
     }
 
+    /**
+     * <p>Méthode destinée à récupérer le nombre de repos restant du personnage </p>
+     * @return Nombre de repos disponible
+     */
+    public int getRestCount() { return restCount; }
+
+    /**
+     * <p>Méthode destinée à savoir si unn personnage possède toujours des repos </p>
+     * @return true si le personnage peut se reposer et false s'il ne peut plus
+     */
+    public Boolean canRest(){
+        return this.restCount > 0;
+    }
 
     /**
      * <p>Méthode destinée à récupérer l'attackManager du personnage </p>

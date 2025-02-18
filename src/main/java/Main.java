@@ -42,9 +42,8 @@ public class Main {
 
         menuItems.add(new MenuItem(
                 2,
-                "Utiliser un élixir",
-                "useElixir",
-                false
+                "Se reposer",
+                "rest"
         ));
 
         menuItems.add(new MenuItem(
@@ -85,5 +84,26 @@ public class Main {
 
         System.out.println(player);
         System.out.println(enemy);
+
+        // Generer les menu items pour le repos,
+        // Permet de choisir après un combat si on peut se reposer ou continuer TODO : AJouter cette partie après un combat (peut etre directement à la fin de la méthode fight (dire bravo et proposer de se reposer)
+        //        ArrayList<MenuItem> restItems = new ArrayList<>();
+        //
+        //        restItems.add(new MenuItem(
+        //                1,
+        //                "Oui, se reposer",
+        //                null
+        //        ));
+        //
+        //        restItems.add(new MenuItem(
+        //                2,
+        //                "Non, continuer d'avancer",
+        //                null
+        //        ));
+        //
+        //        RestMenu restMenu = new RestMenu("choisir une action", restItems);
+        //
+        //        // Recuperer le choix du joueur
+        //        String choice = restMenu.exec(new java.util.Scanner(System.in));
     }
 }

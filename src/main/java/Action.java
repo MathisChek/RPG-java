@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Action {
     public Boolean fight(Player player, Enemy enemy, Boolean isOngoing) {
         System.out.println("Battle");
@@ -43,6 +45,20 @@ public class Action {
                 isOngoing = false;
             }
         }
+        return isOngoing;
+    }
+
+    public Boolean rest(Player player,  Enemy enemy, Boolean isOngoing) {
+        System.out.println("Rest");
+
+        // TODO : Implementer les calculs pour le random et le calcul de la vie du personnage
+
+        if (player.canRest()) {
+            System.out.println("Vous pouvez vous reposer " + player.getRestCount() + " fois");
+        } else {
+            System.out.println("Vous ne pouvez plus vous reposer");
+        }
+
         return isOngoing;
     }
 }
