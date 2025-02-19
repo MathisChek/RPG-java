@@ -2,15 +2,20 @@ import java.util.ArrayList;
 
 public class Action {
     public Boolean fight(Player player, Enemy enemy, Boolean isOngoing) {
-        System.out.println("Battle");
+        // Définition des couleurs ANSI
+        final String RESET = "\u001B[0m";
+        final String RED = "\u001B[31m";    // Dégâts
+        final String GREEN = "\u001B[32m";  // Actions joueur
+        final String YELLOW = "\u001B[33m"; // Actions ennemi
+        final String CYAN = "\u001B[36m";   // Informations générales
 
         AttackMenu attackMenu = new AttackMenu(player.getAttackManager());
         Attack choice = attackMenu.execAttack(new java.util.Scanner(System.in));
-
-        player.getAttackManager().executeAttack(choice.getName());
+        Attack enemyChoice = enemy.getRandomEnemyAttack();
 
         int dealtDamage = player.attack(choice) - enemy.defend(choice);
-        int takenDamage = enemy.attack(choice) - player.defend(choice);
+        int takenDamage = enemy.attack(enemyChoice) - player.defend(enemyChoice);
+
 
         if (takenDamage < 0) {
             dealtDamage -= takenDamage / 2;
@@ -21,15 +26,27 @@ public class Action {
             dealtDamage = 0;
         }
 
+        // Affichage du combat avec couleurs et emojis
+        System.out.println(GREEN + player.getName() + " utilise 🏹 " + choice.getName() + RESET);
+        System.out.println(YELLOW + enemy.getName() + " utilise 🗡️ " + enemyChoice.getName() + RESET);
+
+        System.out.println(RED + "\n💥 " + player.getName() + " inflige " + dealtDamage + " points de dégât !" + RESET);
+        System.out.println(RED + "🔥 " + enemy.getName() + " inflige " + takenDamage + " points de dégât !" + RESET);
+
+        // Appliquer les dégâts
         player.decreaseHealth(takenDamage);
         enemy.decreaseHealth(dealtDamage);
 
+        // Vérification de la fin du combat
         if (player.isDead()) {
+            System.out.println("\n❌ " + RED + player.getName() + " a été vaincu... 💀" + RESET + "\n");
             isOngoing = false;
         } else if (enemy.isDead()) {
-            // Calcul de montée en points d'expérience
+            System.out.println("\n🏆 " + GREEN + enemy.getName() + " est vaincu ! " + player.getName() + " gagne de l'expérience ! ✨" + RESET + "\n");
             player.increaseExperience(enemy.getExperience());
             isOngoing = false;
+        } else {
+            System.out.println("\n⚡ " + CYAN + "Le combat continue... Prépare-toi !" + RESET + "\n");
         }
         return isOngoing;
     }
@@ -49,12 +66,31 @@ public class Action {
     }
 
     public Boolean rest(Player player,  Enemy enemy, Boolean isOngoing) {
-        System.out.println("Rest");
-
-        // TODO : Implementer les calculs pour le random et le calcul de la vie du personnage
+        int restHealthEffect = (int) (Math.random() * ((double) player.getExperience() / 4 + 1) + 10);
+        int restCount = player.getRestCount();
 
         if (player.canRest()) {
-            System.out.println("Vous pouvez vous reposer " + player.getRestCount() + " fois");
+            // Définition des couleurs ANSI (à vérifier si ton terminal les supporte)
+            final String RESET = "\u001B[0m";  // Réinitialise la couleur
+            final String GREEN = "\u001B[32m"; // Texte en vert
+            final String CYAN = "\u001B[36m";  // Texte en cyan
+            final String YELLOW = "\u001B[33m"; // Texte en jaune
+            final String RED = "\u001B[31m"; // Texte en rouge
+
+            System.out.println("\n" + CYAN + "****************************************");
+            System.out.println("*          🛏️  REPOS DU JOUEUR         *");
+            System.out.println("****************************************" + RESET);
+            System.out.println("\n📢 Vous avez choisi de vous reposer.");
+
+            System.out.println(GREEN + "\n - 🔄 Nombre de repos restants : " + player.getRestCount() + RESET);
+
+            player.setHealth(Math.min(player.getHealth() + restHealthEffect, player.getMaxHealth()));
+            player.setRestCount(--restCount);
+
+            System.out.println(YELLOW + "\n✨ -> Vous avez récupéré " + restHealthEffect + " points de vie !");
+            System.out.println("❤️ -> Points de vie actuels : " + player.getHealth() + RESET);
+            System.out.println(RED + "\n❗ Il vous reste " + player.getRestCount() + " repos disponible.\n" + RESET);
+
         } else {
             System.out.println("Vous ne pouvez plus vous reposer");
         }

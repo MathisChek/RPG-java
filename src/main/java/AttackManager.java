@@ -30,27 +30,15 @@ public class AttackManager {
         // Affiche chaque attack avec son index et ses dégâts
         for (Map.Entry<String, Attack> entry : attacks.entrySet()) {
 
-            attackListe.append(String.format("  [%d] %s (💥 %d dégâts)\n",
-                    index++,
-                    entry.getKey(),
-                    entry.getValue().getDamage())
-            );
+            attackListe.append(String.format("  ➜ 💥%s\n",
+                    entry.getKey()
+            ));
         }
 
         // Mise en forme
         String menuTemplate = """ 
-                %s""";
+                \n  %s""";
 
         return String.format(menuTemplate, attackListe.toString().trim());
-    }
-
-    // Méthode pour exécuter une attack par son nom
-    public void executeAttack(String attackName) {
-        Attack attack = attacks.get(attackName);
-        if (attack != null) {
-            attack.execute();
-        } else {
-            System.out.println("❌ Attack introuvable : " + attackName);
-        }
     }
 }

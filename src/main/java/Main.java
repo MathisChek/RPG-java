@@ -48,6 +48,13 @@ public class Main {
 
         menuItems.add(new MenuItem(
                 3,
+                "Se reposer",
+                "purchase",
+                false
+        ));
+
+        menuItems.add(new MenuItem(
+                4,
                 "Prendre la fuite",
                 "escape"
         ));

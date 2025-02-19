@@ -7,6 +7,7 @@ public abstract class BaseMenu {
     private int defaultChoice;
     private int numberOfChoices = 0;
 
+
     public BaseMenu(String title, ArrayList<MenuItem> items, int defaultChoice) {
         this.title = title;
         this.items = items;
@@ -56,6 +57,12 @@ public abstract class BaseMenu {
     }
 
     public String toString() {
+        // Définition des couleurs ANSI
+        final String RESET = "\u001B[0m";  // Réinitialisation couleur
+        final String CYAN = "\u001B[36m";  // Couleur titre
+        final String GREEN = "\u001B[32m"; // Couleur pour options activées
+        final String RED = "\u001B[31m";   // Couleur pour options désactivées
+
         StringBuilder menuItems = new StringBuilder();
         int index = 0;
         for (MenuItem item : items) {
@@ -63,15 +70,17 @@ public abstract class BaseMenu {
             //menuItems.append(item.isEnabled() ? "[" + item.getChoiceValue() + "] " + item.getChoiceLabel() + ".\n" : "");
         }
 
+// Correction de l'affichage du menu
         String menuTemplate = """
-                ****************************************
-                ***** %S
-                ****************************************
-                %s
-                ****************************************
-                """;
+        %s***************************************
+        *          📜 MENU PRINCIPAL          *
+        ***************************************
+        %s%s
+        %s***************************************
+        %s
+        """;
 
-        String menu = String.format(menuTemplate, this.title, menuItems.toString().trim());
+        String menu = String.format(menuTemplate, CYAN, GREEN, menuItems.toString().trim(), CYAN, RESET);
 
         return menu;
     }

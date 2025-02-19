@@ -118,6 +118,11 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     public int getRestCount() { return restCount; }
 
     /**
+     * <p>Méthode destinée à définir le nombre de repos encore disponible pour le personnage </p>
+     */
+    public void setRestCount(int restCount) { this.restCount = restCount; }
+
+    /**
      * <p>Méthode destinée à savoir si unn personnage possède toujours des repos </p>
      * @return true si le personnage peut se reposer et false s'il ne peut plus
      */
@@ -181,19 +186,38 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @return une string avec le bon format
      */
     public String toString() {
-        String statsTemplate = """
-                ****************************************
-                ***** %S
-                ****************************************
-                * HP : %d / %d
-                * XP : %d
-                * Compétences : \n  %s
-                * Équipements : %s
-                * Position: [X:%d, Y:%d]
-                ****************************************
-                """;
+        // Définition des couleurs ANSI
+        final String RESET = "\u001B[0m";  // Réinitialisation couleur
+        final String CYAN = "\u001B[36m";  // Titre et séparation
+        final String GREEN = "\u001B[32m"; // Points de vie
+        final String YELLOW = "\u001B[33m"; // Expérience
+        final String BLUE = "\u001B[34m"; // Position
+        final String RED = "\u001B[31m"; // Dégâts
 
-        String stats = String.format(statsTemplate, this.name, this.health, this.maxHealth, this.experience, this.attackManager.attacks(), "à implémenter", 0, 0);
+// Template de statistiques avec couleurs et icônes
+        String statsTemplate = """
+        %s****************************************
+        *          🏆 %S                   *
+        ****************************************%s
+        * ❤️ HP : %s%d / %d%s
+        * 🎖️ XP : %s%d%s
+        * 📜️  Compétences :%s%s%s
+        * 🎒 Équipements : %s%s%s
+        * 📍 Position: %s[X:%d, Y:%d]%s
+        %s****************************************%s
+        """;
+
+// Formatage de la chaîne avec couleurs et valeurs dynamiques
+        String stats = String.format(statsTemplate,
+                CYAN, this.name,  // Nom du personnage
+                RESET,
+                GREEN, this.health, this.maxHealth, RESET,  // PV avec couleur
+                YELLOW, this.experience, RESET,  // XP avec couleur
+                BLUE, this.attackManager.attacks(), RESET,  // Compétences
+                BLUE, "à implémenter", RESET,  // Équipements
+                BLUE, 0, 0, RESET,  // Position
+                CYAN, RESET  // Fin du cadre
+        );
 
         return stats;
     }
