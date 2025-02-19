@@ -5,8 +5,6 @@ import java.lang.reflect.Method;
  * @author Captain America
  */
 public abstract class Character { // Classe abstraite (car non instantiable) imposant un « contrat » pour les classes dérivées
-    private final String BATTLE_MODE = "1";
-    private final String ESCAPE_MODE = "2";
     private final AttackManager attackManager;
     // Attributs communs à l'ensemble des classes filles
     private String name;
@@ -14,6 +12,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     private int maxHealth;
     private int experience;
     private int restCount;
+    private int money;
 
     protected int attackSkillsNumber, defenseSkillsNumber;
 
@@ -25,12 +24,13 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @param maxHealth nombre de points de vie maximum du personnage
      * @param experience nombre de points experience du personnage
      */
-    public Character(String name, int maxHealth, int experience) {
+    public Character(String name, int maxHealth, int experience, int money) {
         this.name = name;
         this.health = this.maxHealth = maxHealth;
         this.experience = experience;
         this.attackManager = new AttackManager(this);
         this.restCount = 5; // Chaque personnage peut se reposer 5 fois avant de devoir acheter des items pour se reposer ou récupérer de la vie
+        this.money = money;
     }
 
     /**
@@ -106,6 +106,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
     /**
      * <p>Méthode destinée à définir le nombre de points d'experience du personnage </p>
+     * @param experience, nombre de points d'expérience
      */
     public void setExperience(int experience) {
         this.experience = experience;
@@ -119,6 +120,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
     /**
      * <p>Méthode destinée à définir le nombre de repos encore disponible pour le personnage </p>
+     * @param restCount, nombre de repos disponible pour le personnage
      */
     public void setRestCount(int restCount) { this.restCount = restCount; }
 
@@ -131,6 +133,34 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     }
 
     /**
+     * <p>Méthode destinée à récupérer le nombre de pièces disponible du personnage </p>
+     * @return Nombre de pièces disponible
+     */
+    public int getMoney() { return money;     }
+
+    /**
+     * <p>Méthode destinée à définir le nombre de repos encore disponible pour le personnage </p>
+     * @param money, nombre de pièces aloué au personnage
+     */
+    public void setMoney(int coins) { this.money = coins; }
+
+    /**
+     * <p>Méthode destinée à décrémenter le nombre de pièces du personnage </p>
+     * @param coins nombre de piècese à retirer au personnage
+     */
+    public void decreaseMoney(int coins) {
+        this.money -= coins;
+    }
+
+    /**
+     * <p>Méthode destinée à incrémenter le nombre de pièces du personnage </p>
+     * @param coins nombre de pièces à ajouter au personnage
+     */
+    public void increaseMoney(int coins) {
+        this.money += coins;
+    }
+
+    /**
      * <p>Méthode destinée à récupérer l'attackManager du personnage </p>
      * @return PV max du personnage
      */
@@ -138,7 +168,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
     /**
      * <p>Méthode destinée à décrémenter le nombre de points d'experience du personnage </p>
-     * @param points nombre de points d'experience à ajouter au personnage
+     * @param points nombre de points d'experience à retirer au personnage
      */
     public void decreaseExperience(int points) {
         this.experience -= points;
@@ -171,10 +201,35 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
 
         Action action = new Action();
         try {
-            Method method = action.getClass().getMethod(mode, Player.class, Enemy.class, Boolean.class);
-            isOngoing = (boolean) method.invoke(action, this, character, isOngoing);
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException("Erreur d'accès à la méthode : " + mode, e);
+            // 🔹 Récupérer toutes les méthodes de la classe Action
+            Method[] methods = action.getClass().getMethods();
+
+            for (Method method : methods) {
+                if (method.getName().equals(mode)) { // 🔹 Vérifier si le nom correspond
+                    Class<?>[] paramTypes = method.getParameterTypes(); // 🔹 Obtenir les paramètres attendus
+
+                    // 🔹 Construire dynamiquement les arguments
+                    Object[] args = new Object[paramTypes.length];
+
+                    for (int i = 0; i < paramTypes.length; i++) {
+                        if (paramTypes[i] == Player.class) {
+                            args[i] = this; // Player actuel
+                        } else if (paramTypes[i] == Enemy.class) {
+                            args[i] = character; // Ennemi
+                        } else if (paramTypes[i] == Boolean.class || paramTypes[i] == boolean.class) {
+                            args[i] = isOngoing; // État du combat
+                        }
+                    }
+
+                    // 🔹 Appeler la méthode avec les bons arguments
+                    Object result = method.invoke(action, args);
+
+                    if (result instanceof Boolean) { // Vérifier si le retour est un booléen
+                        isOngoing = (Boolean) result;
+                    }
+                    break; // On arrête la boucle une fois qu'on a trouvé la bonne méthode
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,7 +256,8 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         ****************************************%s
         * ❤️ HP : %s%d / %d%s
         * 🎖️ XP : %s%d%s
-        * 📜️  Compétences :%s%s%s
+        * \uD83D\uDCB0 Coins : %s%d%s
+        * 📜️ Compétences :%s%s%s
         * 🎒 Équipements : %s%s%s
         * 📍 Position: %s[X:%d, Y:%d]%s
         %s****************************************%s
@@ -213,6 +269,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
                 RESET,
                 GREEN, this.health, this.maxHealth, RESET,  // PV avec couleur
                 YELLOW, this.experience, RESET,  // XP avec couleur
+                YELLOW, this.money, RESET,
                 BLUE, this.attackManager.attacks(), RESET,  // Compétences
                 BLUE, "à implémenter", RESET,  // Équipements
                 BLUE, 0, 0, RESET,  // Position
@@ -222,11 +279,12 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         return stats;
     }
 
-    // Méthodes abstraites liées à l'action de « combattre »
     /**
-     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
+     * <p>Méthode destinée à calculer les dégâts infligés et/ou subit par le personnage</p>
+     * @param attack, attack utiliser ou subit par le personnage
+     * @return les dégâts calculés par rapport à l'attaque, type int
      */
-    public int attack(Attack attack) { // Définition de l'attaque du point de vue du joueur
+    protected int calculateDamage(Attack attack, boolean isAttacking) {
         double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
         double experienceBonus = this.getExperience() / 10.0;
         double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
@@ -239,19 +297,22 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         return (int) total;
     }
 
+    // Méthodes abstraites liées à l'action de « combattre »
     /**
      * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
+     * @param attack, attack utiliser par le personnage
+     * @return les dégâts infligés à 'adversaire, type int
      */
-    public int defend(Attack attack) { // Définition de la défense du point de vue de l'ennemi
-        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
-        double experienceBonus = this.getExperience() / 10.0;
-        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+    public int attack(Attack attack) {
+        return calculateDamage(attack, true);
+    }
 
-        // Pondération avec damage
-        int damage = attack.getDamage();
-        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
-
-        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
-        return (int) total;
+    /**
+     * <p>Méthode destinée à structurer les class enfants ennemi et player</p>
+     * @param attack, attack subit par le personnage
+     * @return les dégâts sûbit, type int
+     */
+    public int defend(Attack attack) {
+        return calculateDamage(attack, false);
     }
 }

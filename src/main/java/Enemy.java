@@ -3,23 +3,23 @@ import java.util.List;
 import java.util.Random;
 
 public class Enemy extends Character {
-    private int playerExperience;
+    private int enemyExperience;
 
-    public Enemy(String name, int playerExperience) {
+    public Enemy(String name, int enemyExperience, int money) {
         // Appel au constructeur de la classe mère
-        super(name, (int) (Math.random() * playerExperience + (double) playerExperience / 3 + 5), (int) (Math.random() * ((double) playerExperience / 4 + 2) + 1));
-        this.playerExperience = playerExperience;
+        super(name, (int) (Math.random() * enemyExperience + (double) enemyExperience / 3 + 5), (int) (Math.random() * ((double) enemyExperience / 4 + 2) + 1), money);
+        this.enemyExperience = enemyExperience;
     }
 
-    public int getPlayerExperience() {
-        return playerExperience;
+    public int getEnemyExperience() {
+        return enemyExperience;
     }
 
-    public void setPlayerExperience(int playerExperience) {
-        if (playerExperience < 0) {
-            this.playerExperience = 0;
+    public void setEnemyExperience(int enemyExperience) {
+        if (enemyExperience < 0) {
+            this.enemyExperience = 0;
         }
-        this.playerExperience = playerExperience;
+        this.enemyExperience = enemyExperience;
     }
 
     public int getMaxHealth(int experience) {

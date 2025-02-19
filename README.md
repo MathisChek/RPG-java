@@ -8,9 +8,9 @@
 - [x] Système de Menu Attack
 - [ ] Système de Menu Items
 - [ ] Système d'Action
-- [ ] Système de repos
+- [x] Système de repos
 - [ ] Système d'achats
-- [ ] La prise en compte des repos (rest) et équipements (purchase) dans la calcul des points de vie (health) et d'expérience (experience) du joueur.
+- [ ] La prise en compte des repos (rest) et équipements (purchase) dans le calcul des points de vie (health) et d'expérience (experience) du joueur.
 - [ ] Documentation Character
 
 ## Diagramme de class (UML)
