@@ -3,5 +3,7 @@ public enum ActionType {
     ESCAPE,
     REST,
     PURCHASE_ELIXIR,
-    NEXT_LEVEL
+    NEXT_LEVEL,
+    ATTACK,
+    DEFENSE
 }

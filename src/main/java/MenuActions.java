@@ -1,6 +1,16 @@
 public class MenuActions {
-    public boolean goToNextLevel(Player player, Story story, Boolean isOngoing) {
+    public boolean goToNextFight(Player player, Story story) {
+        if (story.getCurrentLevel().hasMoreEnemies()) {
+            System.out.println("⚔️ Un nouvel ennemi apparaît !");
+            return true; // Continue les combats
+        }
+        System.out.println("✅ Tous les ennemis ont été vaincus !");
+        return false; // Tous les ennemis sont vaincus, on peut passer au niveau suivant
+    }
+
+    public boolean goToNextLevel(Player player, Story story) {
         if (!story.isLastLevel()) {
+            System.out.println("✅ Tous les ennemis du niveau ont été vaincus !");
             story.nextLevel();
             System.out.println("🎭 Passage au niveau suivant...");
         } else {

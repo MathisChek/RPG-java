@@ -22,7 +22,16 @@ public class MenuInitializer {
             case COMBAT_END:
                 menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
-                menuItems.add(new MenuItem(3, "➡️ Passer au prochain combat", "nextBattle"));
+                menuItems.add(new MenuItem(3, "⚔️ Passer au prochain combat", "goToNextFight"));
+                break;
+            case LEVEL_END:
+                menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
+                menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
+                menuItems.add(new MenuItem(3, "➡️ Passer au prochain niveau", "goToNextLevel")); // 🏆 Action pour changer de niveau
+                break;
+            case SKILL_SELECTION:
+                menuItems.add(new MenuItem(1, "⚔️ Attaque → Dégâts augmentés", "attack"));
+                menuItems.add(new MenuItem(2, "🛡️ Défense → Moins de dégâts subis", "defense"));
                 break;
             default:
                 System.out.println("❌ Type de menu inconnu : " + menuType);

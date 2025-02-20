@@ -16,10 +16,9 @@ public class Main {
         ArrayList<MenuItem> combatActions = combatMenuInitializer.getMenuItems();   // 🔹 Récupération des items du menu de combat
         ActionsMenu actionsMenu = new ActionsMenu("choisir une action", combatActions); // 🔹 Création du menu d'actions pour les combats
 
-//        // 🔹 Instanciation de MenuInitializer pour les actions en dehors du combat
-//        MenuInitializer combatEndMenuInitializer = new MenuInitializer(MenuType.COMBAT_END);
-//        ArrayList<MenuItem> combatEndActions = combatEndMenuInitializer.getMenuItems();  // 🔹 Récupération des items du menu en dehors des combats
-//        ActionsMenu combatEndMenu = new ActionsMenu("choisir une action", combatEndActions); // 🔹 Création du menu d'actions pour les combats
+        // 🔹 Initialisation du menu de sélection des compétences
+        MenuInitializer skillMenu = new MenuInitializer(MenuType.SKILL_SELECTION);
+        ActionsMenu menu = new ActionsMenu("Sélection de compétence", skillMenu.getMenuItems());
 
         // 🔹 Création des personnages
         Player player = CharacterFactory.createPlayer("Joueur");
@@ -27,23 +26,12 @@ public class Main {
 
         System.out.println(story.getLevelsNumber());
 
-//        while (!story.isLastLevel()) {
-//            System.out.println("Niveau " + story.getCurrentLevelNumber() + " : " + story.getCurrentLevel().getTitle());
-//            story.nextLevel();
-//        }
-
-//        do {
-//            System.out.println(player);
-//            System.out.println(enemy);
-//            choice = actionsMenu.exec(scanner);
-//        } while(player.fight(enemy, choice));
-
-//        System.out.println(player);
-//        System.out.println(enemy);
-
         while (!story.isLastLevel()) {
             System.out.println("Niveau " + (story.getCurrentLevelNumber() + 1) + " : " + story.getCurrentLevel().getTitle());
             System.out.println("Histoire " + story.getCurrentLevel().getIntro());
+
+            ActionType choice = menu.exec(scanner);
+            player.specialize(choice);
 
             do {
                 System.out.println(player);
@@ -57,46 +45,28 @@ public class Main {
             System.out.println(story.getCurrentLevel().getOutro());
             break;
         }
-
-        // Generer les menu items pour le repos,
-        // Permet de choisir après un combat si on peut se reposer ou continuer TODO : AJouter cette partie après un combat (peut etre directement à la fin de la méthode fight (dire bravo et proposer de se reposer)
-        //        ArrayList<MenuItem> restItems = new ArrayList<>();
-        //
-        //        restItems.add(new MenuItem(
-        //                1,
-        //                "Oui, se reposer",
-        //                null
-        //        ));
-        //
-        //        restItems.add(new MenuItem(
-        //                2,
-        //                "Non, continuer d'avancer",
-        //                null
-        //        ));
-        //
-        //        RestMenu restMenu = new RestMenu("choisir une action", restItems);
-        //
-        //        // Recuperer le choix du joueur
-        //        String choice = restMenu.exec(new java.util.Scanner(System.in));
     }
 
     public static void handleCombatEndMenu(Player player, Story story, Scanner scanner) {
         System.out.println("\n🏆 Le combat est terminé !");
         System.out.println("Que voulez-vous faire ?");
 
-        // 🔹 Création du menu de fin de combat
-        MenuInitializer combatEndMenuInitializer = new MenuInitializer(MenuType.COMBAT_END);
-        ArrayList<MenuItem> combatEndActions = combatEndMenuInitializer.getMenuItems();
-        ActionsMenu combatEndMenu = new ActionsMenu("choisir une action", combatEndActions);
+        // 🔹 Choisir le bon menu en fonction des ennemis restants
+        MenuType menuType = story.getCurrentLevel().hasMoreEnemies() ? MenuType.COMBAT_END : MenuType.LEVEL_END;
+        MenuInitializer menuInitializer = new MenuInitializer(menuType);
+        ActionsMenu actionsMenu = new ActionsMenu("choisir une action", menuInitializer.getMenuItems());
 
         // 🔹 Afficher et récupérer l'action choisie
-        ActionType choice = combatEndMenu.exec(scanner);
+        ActionType choice = actionsMenu.exec(scanner);
 
         // 🔹 Exécuter l’action avec `ActionManager`
         ActionManager actionManager = new ActionManager();
 
+        // 🔹 Vérifier si l'action nécessite `isOngoing`
         if (choice == ActionType.FIGHT || choice == ActionType.REST || choice == ActionType.ESCAPE) {
             boolean isOngoing = actionManager.executeAction(choice, player, story, true);
+
+            // 🔄 Si l'action continue le combat, on rappelle le menu
             if (isOngoing) {
                 handleCombatEndMenu(player, story, scanner);
             }
