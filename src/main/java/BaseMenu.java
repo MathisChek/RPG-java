@@ -38,7 +38,7 @@ public abstract class BaseMenu {
 
     public void setNumberOfChoices(int numberOfChoices) { this.numberOfChoices = numberOfChoices; }
 
-    public String exec(Scanner scanner) {
+    public ActionType exec(Scanner scanner) {
         int choice = -1;
         do {
             System.out.print(this);
@@ -53,7 +53,19 @@ public abstract class BaseMenu {
                 System.out.println("Veuillez saisir quelque chose.");
             }
         } while (choice < 1 || choice > numberOfChoices);
-        return items.get(choice - 1).getChoiceAction();
+
+        String choiceStr = items.get(choice - 1).getChoiceAction(); // 🔹 Récupère le nom de l'action en `String`
+
+        // 🔹 Convertir en `ActionType`
+        ActionType actionChoice = null;
+        for (ActionType action : ActionType.values()) {
+            if (action.name().equalsIgnoreCase(choiceStr)) {
+                actionChoice = action;
+                break;
+            }
+        }
+
+        return actionChoice;
     }
 
     public String toString() {

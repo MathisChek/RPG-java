@@ -5,9 +5,9 @@ import java.util.Random;
 public class Enemy extends Character {
     private int enemyExperience;
 
-    public Enemy(String name, int enemyExperience, int money) {
+    public Enemy(String name, int enemyExperience, int coins) {
         // Appel au constructeur de la classe mère
-        super(name, (int) (Math.random() * enemyExperience + (double) enemyExperience / 3 + 5), (int) (Math.random() * ((double) enemyExperience / 4 + 2) + 1), money);
+        super(name, (int) (Math.random() * enemyExperience + (double) enemyExperience / 3 + 5), (int) (Math.random() * ((double) enemyExperience / 4 + 2) + 1), coins);
         this.enemyExperience = enemyExperience;
     }
 

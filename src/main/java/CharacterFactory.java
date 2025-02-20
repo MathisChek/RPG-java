@@ -6,9 +6,9 @@ public class CharacterFactory {
         return player;
     }
 
-    public static Enemy createEnemy(String name, int playerExperience, int enemyMoney) {
-        Enemy enemy = new Enemy(name, playerExperience, enemyMoney);
-        enemy.getAttackManager().addAttack("Coup d'épée", new Attack("Coup d'épée", 30, enemy, "🗡️"));
+    public static Enemy createEnemy(String name, int playerExperience, int enemyCoins) {
+        Enemy enemy = new Enemy(name, playerExperience, enemyCoins);
+        enemy.getAttackManager().addAttack("Coup d'épée", new Attack("Coup d'épée", 100, enemy, "🗡️"));
         return enemy;
     }
 }

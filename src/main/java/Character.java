@@ -12,7 +12,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     private int maxHealth;
     private int experience;
     private int restCount;
-    private int money;
+    private int coins;
 
     protected int attackSkillsNumber, defenseSkillsNumber;
 
@@ -24,13 +24,13 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @param maxHealth nombre de points de vie maximum du personnage
      * @param experience nombre de points experience du personnage
      */
-    public Character(String name, int maxHealth, int experience, int money) {
+    public Character(String name, int maxHealth, int experience, int coins) {
         this.name = name;
         this.health = this.maxHealth = maxHealth;
         this.experience = experience;
         this.attackManager = new AttackManager(this);
         this.restCount = 5; // Chaque personnage peut se reposer 5 fois avant de devoir acheter des items pour se reposer ou récupérer de la vie
-        this.money = money;
+        this.coins = coins;
     }
 
     /**
@@ -136,28 +136,28 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * <p>Méthode destinée à récupérer le nombre de pièces disponible du personnage </p>
      * @return Nombre de pièces disponible
      */
-    public int getMoney() { return money;     }
+    public int getCoins() { return coins; }
 
     /**
      * <p>Méthode destinée à définir le nombre de repos encore disponible pour le personnage </p>
-     * @param money, nombre de pièces aloué au personnage
+     * @param coins, nombre de pièces aloué au personnage
      */
-    public void setMoney(int coins) { this.money = coins; }
+    public void setCoins(int coins) { this.coins = coins; }
 
     /**
      * <p>Méthode destinée à décrémenter le nombre de pièces du personnage </p>
      * @param coins nombre de piècese à retirer au personnage
      */
-    public void decreaseMoney(int coins) {
-        this.money -= coins;
+    public void decreaseCoins(int coins) {
+        this.coins -= coins;
     }
 
     /**
      * <p>Méthode destinée à incrémenter le nombre de pièces du personnage </p>
      * @param coins nombre de pièces à ajouter au personnage
      */
-    public void increaseMoney(int coins) {
-        this.money += coins;
+    public void increaseCoins(int coins) {
+        this.coins += coins;
     }
 
     /**
@@ -196,44 +196,9 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @param mode - mode de combat, en fonction du mode différentes actions seront réaliser par le joueur
      * @return un boolean qui permet de savoir si le combat à était gagné ou perdu par le joueur
      */
-    public boolean fight(Character character, String mode) {
-        boolean isOngoing = true;
-
-        Action action = new Action();
-        try {
-            // 🔹 Récupérer toutes les méthodes de la classe Action
-            Method[] methods = action.getClass().getMethods();
-
-            for (Method method : methods) {
-                if (method.getName().equals(mode)) { // 🔹 Vérifier si le nom correspond
-                    Class<?>[] paramTypes = method.getParameterTypes(); // 🔹 Obtenir les paramètres attendus
-
-                    // 🔹 Construire dynamiquement les arguments
-                    Object[] args = new Object[paramTypes.length];
-
-                    for (int i = 0; i < paramTypes.length; i++) {
-                        if (paramTypes[i] == Player.class) {
-                            args[i] = this; // Player actuel
-                        } else if (paramTypes[i] == Enemy.class) {
-                            args[i] = character; // Ennemi
-                        } else if (paramTypes[i] == Boolean.class || paramTypes[i] == boolean.class) {
-                            args[i] = isOngoing; // État du combat
-                        }
-                    }
-
-                    // 🔹 Appeler la méthode avec les bons arguments
-                    Object result = method.invoke(action, args);
-
-                    if (result instanceof Boolean) { // Vérifier si le retour est un booléen
-                        isOngoing = (Boolean) result;
-                    }
-                    break; // On arrête la boucle une fois qu'on a trouvé la bonne méthode
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return isOngoing;
+    public boolean fight(Character character, ActionType mode) {
+        ActionManager actionManager = new ActionManager();
+        return actionManager.executeAction(mode, this, character);
     }
 
     /**
@@ -269,7 +234,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
                 RESET,
                 GREEN, this.health, this.maxHealth, RESET,  // PV avec couleur
                 YELLOW, this.experience, RESET,  // XP avec couleur
-                YELLOW, this.money, RESET,
+                YELLOW, this.coins, RESET,
                 BLUE, this.attackManager.attacks(), RESET,  // Compétences
                 BLUE, "à implémenter", RESET,  // Équipements
                 BLUE, 0, 0, RESET,  // Position

@@ -5,17 +5,29 @@ public class MenuInitializer {
     private ArrayList<MenuItem> menuItems;  // Liste des éléments du menu
 
     // 🟢 Constructeur qui initialise le menu
-    public MenuInitializer() {
+    public MenuInitializer(MenuType menuType) {
         this.menuItems = new ArrayList<>();
-        initializeMenu();
+        initializeMenu(menuType);
     }
 
     // 🟢 Méthode pour initialiser les items du menu
-    private void initializeMenu() {
-        menuItems.add(new MenuItem(1, "Combattre", "fight"));
-        menuItems.add(new MenuItem(2, "Se reposer", "rest"));
-        menuItems.add(new MenuItem(3, "Acheter des objets", "purchase"));
-        menuItems.add(new MenuItem(4, "Prendre la fuite", "escape"));
+    private void initializeMenu(MenuType menuType) {
+        switch (menuType){
+            case COMBAT:
+                menuItems.add(new MenuItem(1, "⚔️ Combattre", "fight"));
+                menuItems.add(new MenuItem(2, "🧪 Utiliser un élixir", "useElixir", false));
+                menuItems.add(new MenuItem(3, "💤 Se reposer", "rest"));
+                menuItems.add(new MenuItem(4, "🏃 Prendre la fuite", "escape"));
+                break;
+            case COMBAT_END:
+                menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
+                menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
+                menuItems.add(new MenuItem(3, "➡️ Passer au prochain combat", "nextBattle"));
+                break;
+            default:
+                System.out.println("❌ Type de menu inconnu : " + menuType);
+                break;
+        }
     }
 
     // 🟢 Getter pour récupérer le menu
