@@ -4,6 +4,7 @@ public enum ActionType {
     REST,
     PURCHASE_ELIXIR,
     NEXT_LEVEL,
+    NEXT_FIGHT,
     ATTACK,
     DEFENSE
 }

@@ -20,9 +20,8 @@ public class Main {
         MenuInitializer skillMenu = new MenuInitializer(MenuType.SKILL_SELECTION);
         ActionsMenu menu = new ActionsMenu("Sélection de compétence", skillMenu.getMenuItems());
 
-        // 🔹 Création des personnages
+        // 🔹 Création du personnage principale
         Player player = CharacterFactory.createPlayer("Joueur");
-        Enemy enemy = CharacterFactory.createEnemy("Ennemi", player.getExperience(), 50);
 
         System.out.println(story.getLevelsNumber());
 
@@ -33,17 +32,23 @@ public class Main {
             ActionType choice = menu.exec(scanner);
             player.specialize(choice);
 
-            do {
-                System.out.println(player);
-                System.out.println(enemy);
+            while (story.getCurrentLevel().hasRemainingEnemies()) { // 🔹 Tant qu'il y a des ennemis
+                Enemy enemy = story.getCurrentLevel().getNextEnemy(); // 🔹 Récupère le prochain ennemi
+                System.out.println("⚔️ Un nouvel ennemi apparaît : " + enemy.getName());
 
-                // 🔹 Récupérer le choix en ActionType
-                choice = actionsMenu.exec(scanner);
+                do {
+                    System.out.println(player);
+                    System.out.println(enemy);
+                    choice = actionsMenu.exec(scanner);
+                } while (player.fight(enemy, choice));
 
-            } while (player.fight(enemy, choice));
+                if (story.getCurrentLevel().hasRemainingEnemies()) {
+                    handleCombatEndMenu(player, story, scanner); // 🔹 Permet de récupérer après un combat
+                }
+            }
 
             System.out.println(story.getCurrentLevel().getOutro());
-            break;
+            handleLevelEndMenu(player, story, scanner); // 🔹 Ajoute un menu de fin de niveau
         }
     }
 
@@ -52,7 +57,7 @@ public class Main {
         System.out.println("Que voulez-vous faire ?");
 
         // 🔹 Choisir le bon menu en fonction des ennemis restants
-        MenuType menuType = story.getCurrentLevel().hasMoreEnemies() ? MenuType.COMBAT_END : MenuType.LEVEL_END;
+        MenuType menuType = story.getCurrentLevel().hasRemainingEnemies() ? MenuType.COMBAT_END : MenuType.LEVEL_END;
         MenuInitializer menuInitializer = new MenuInitializer(menuType);
         ActionsMenu actionsMenu = new ActionsMenu("choisir une action", menuInitializer.getMenuItems());
 
@@ -73,5 +78,21 @@ public class Main {
         } else {
             actionManager.executeAction(choice, player, story);
         }
+    }
+
+    public static void handleLevelEndMenu(Player player, Story story, Scanner scanner) {
+        System.out.println("\n🏁 Vous avez terminé ce niveau !");
+        System.out.println("Que voulez-vous faire ?");
+
+        // 🔹 Création du menu de fin de niveau
+        MenuInitializer menuInitializer = new MenuInitializer(MenuType.LEVEL_END);
+        ActionsMenu levelEndMenu = new ActionsMenu("choisir une action", menuInitializer.getMenuItems());
+
+        // 🔹 Afficher et récupérer l'action choisie
+        ActionType choice = levelEndMenu.exec(scanner);
+
+        // 🔹 Exécuter l’action avec `ActionManager`
+        ActionManager actionManager = new ActionManager();
+        actionManager.executeAction(choice, player, story);
     }
 }

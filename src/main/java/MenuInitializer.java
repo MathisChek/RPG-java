@@ -22,12 +22,12 @@ public class MenuInitializer {
             case COMBAT_END:
                 menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
-                menuItems.add(new MenuItem(3, "⚔️ Passer au prochain combat", "goToNextFight"));
+                menuItems.add(new MenuItem(3, "⚔️ Passer au prochain combat", "next_fight"));
                 break;
             case LEVEL_END:
                 menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
-                menuItems.add(new MenuItem(3, "➡️ Passer au prochain niveau", "goToNextLevel")); // 🏆 Action pour changer de niveau
+                menuItems.add(new MenuItem(3, "➡️ Passer au prochain niveau", "next_level")); // 🏆 Action pour changer de niveau
                 break;
             case SKILL_SELECTION:
                 menuItems.add(new MenuItem(1, "⚔️ Attaque → Dégâts augmentés", "attack"));

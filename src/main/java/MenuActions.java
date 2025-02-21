@@ -1,6 +1,6 @@
 public class MenuActions {
     public boolean goToNextFight(Player player, Story story) {
-        if (story.getCurrentLevel().hasMoreEnemies()) {
+        if (story.getCurrentLevel().hasRemainingEnemies()) {
             System.out.println("⚔️ Un nouvel ennemi apparaît !");
             return true; // Continue les combats
         }

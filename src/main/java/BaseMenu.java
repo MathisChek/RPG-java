@@ -65,6 +65,9 @@ public abstract class BaseMenu {
             }
         }
 
+        System.out.println("🔍 Debug: choiceStr = " + choiceStr);
+        System.out.println("🔍 Debug: actionChoice = " + (actionChoice != null ? actionChoice.name() : "null"));
+
         return actionChoice;
     }
 

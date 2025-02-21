@@ -11,9 +11,8 @@ public class CombatActions {
         Attack choice = attackMenu.execAttack(new java.util.Scanner(System.in));
         Attack enemyChoice = enemy.getRandomEnemyAttack();
 
-        int dealtDamage = player.attack(choice) - enemy.defend(choice);
-        int takenDamage = enemy.attack(enemyChoice) - player.defend(enemyChoice);
-
+        int dealtDamage = Math.max(1, player.attack(choice) - enemy.defend(choice));
+        int takenDamage = Math.max(1, enemy.attack(enemyChoice) - player.defend(enemyChoice));
 
         if (takenDamage < 0) {
             dealtDamage -= takenDamage / 2;

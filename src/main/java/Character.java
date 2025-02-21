@@ -250,16 +250,16 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @return les dégâts calculés par rapport à l'attaque, type int
      */
     protected int calculateDamage(Attack attack, boolean isAttacking) {
-        double base = (this.getExperience() / 4.0) + (attackSkillsNumber * 3.0) + 3.0;
-        double experienceBonus = this.getExperience() / 10.0;
-        double skillBonus = (attackSkillsNumber * 2.0) + defenseSkillsNumber + 1.0;
+        double base = (this.getExperience() / 2.0) + (attackSkillsNumber * 4.0) + 5.0; // Augmente les valeurs de base
+        double experienceBonus = this.getExperience() / 5.0;
+        double skillBonus = (attackSkillsNumber * 2.5) + defenseSkillsNumber + 2.0;
 
-        // Pondération avec damage
         int damage = attack.getDamage();
-        double damageFactor = 1 + (damage / 100.0);  // Exemple : damage=20 → facteur 1.2
+        double damageFactor = 1 + (damage / 30.0);  // Augmente l'influence de l'attaque
 
-        double total = Math.random() * (base * damageFactor) + experienceBonus + skillBonus;
-        return (int) total;
+        double total = ((Math.random() * 0.5 + 0.5) * (base * damageFactor)) + experienceBonus + skillBonus;
+
+        return Math.max(1, (int) total); // Minimum 1 dégât
     }
 
     // Méthodes abstraites liées à l'action de « combattre »

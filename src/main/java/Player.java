@@ -9,7 +9,7 @@ public class Player extends Character {
         // Appel au constructeur de la classe mère
         super(name, Player.MAX_HEALTH, Player.EXPERIENCE, 0);
         // Initialisation du nombre de compétences (attaque / défense)
-        this.attackSkillsNumber = this.defenseSkillsNumber = 0;
+        this.attackSkillsNumber = this.defenseSkillsNumber = 1;
     }
 
     public void specialize(ActionType choice) {
