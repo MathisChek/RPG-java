@@ -25,9 +25,13 @@ RPG-java/digramme.png
 
 ## Bilan des acquis
 
-   🔹 Encapsulation → Structuration du jeu en objets bien définis (Player, Enemy, Story, Level).
-   🔹 Héritage → Réutilisation des propriétés et comportements (Enemy vs BossEnemy).
-   🔹 Polymorphisme → Gestion uniforme des ennemis et attaques via des méthodes génériques (attack()).
-   🔹 Abstraction → Imposition d'une structure (Character impose attack() et takeDamage()).
-   🔹 Association / Composition → Un Story gère des Level, un Level gère des Enemy...
+🔹 Encapsulation → Structuration du jeu en objets bien définis (Player, Enemy, Story, Level).
+
+🔹 Héritage → Réutilisation des propriétés et comportements (Enemy vs BossEnemy).
+   
+🔹 Polymorphisme → Gestion uniforme des ennemis et attaques via des méthodes génériques (attack()).
+ 
+🔹 Abstraction → Imposition d'une structure (Character impose attack() et takeDamage()).
+ 
+🔹 Association / Composition → Un Story gère des Level, un Level gère des Enemy...
 
