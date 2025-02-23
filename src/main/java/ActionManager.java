@@ -48,8 +48,6 @@ public class ActionManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("❌ Aucune action trouvée pour : " + actionType);
         return isOngoing;
     }
 }

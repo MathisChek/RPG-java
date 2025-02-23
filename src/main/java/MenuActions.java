@@ -1,21 +1,25 @@
 public class MenuActions {
-    public boolean goToNextFight(Player player, Story story) {
+    public void infos(Player player) {
+        System.out.println(player.toString());
+    }
+
+    public boolean nfight(Player player, Story story) {
         if (story.getCurrentLevel().hasRemainingEnemies()) {
-            System.out.println("⚔️ Un nouvel ennemi apparaît !");
             return true; // Continue les combats
         }
+
         System.out.println("✅ Tous les ennemis ont été vaincus !");
         return false; // Tous les ennemis sont vaincus, on peut passer au niveau suivant
     }
 
-    public boolean goToNextLevel(Player player, Story story) {
-        if (!story.isLastLevel()) {
+    public boolean nlevel(Player player, Story story) {
+        if (!story.isLastLevel()) { // ✅ Vérifie si ce n'est PAS le dernier niveau
             System.out.println("✅ Tous les ennemis du niveau ont été vaincus !");
-            story.nextLevel();
+            story.nextLevel(); // ✅ Passage au niveau suivant uniquement si possible
             System.out.println("🎭 Passage au niveau suivant...");
         } else {
             System.out.println("🏆 Vous avez terminé l'aventure !");
-            GameManager.gameOver(true);
+            GameManager.gameOver(true); // ✅ Affiche la victoire SEULEMENT si c'est bien fini
         }
         return false; // Arrête le menu après le passage de niveau
     }

@@ -15,7 +15,6 @@ public class AttackManager {
     // Méthode pour ajouter une attack
     public void addAttack(String name, Attack attack) {
         attacks.put(name, attack);
-        System.out.println("✅ Attack ajoutée : " + name);
     }
 
     // Méthode pour lister les attacks du personage

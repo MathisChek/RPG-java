@@ -14,7 +14,6 @@ public abstract class BaseMenu {
         this.defaultChoice = defaultChoice;
         this.items.removeIf(item -> item.isDisabled()); // Supprime de notre ArrayList les MenuItem désactivés
         this.numberOfChoices = this.items.size();
-        // TODO Vérifier qu'aucun doublon de valeur de position n'est présent dans notre ArrayList
         this.items.sort((item1, item2) -> item1.getchoiceRank() - item2.getchoiceRank()); // Tri notre ArrayList en fonction du choiceRank
     }
 
@@ -64,9 +63,6 @@ public abstract class BaseMenu {
                 break;
             }
         }
-
-        System.out.println("🔍 Debug: choiceStr = " + choiceStr);
-        System.out.println("🔍 Debug: actionChoice = " + (actionChoice != null ? actionChoice.name() : "null"));
 
         return actionChoice;
     }

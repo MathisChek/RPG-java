@@ -1,10 +1,12 @@
 public enum ActionType {
+    INFOS,  // Information personnage
     FIGHT,
     ESCAPE,
     REST,
-    PURCHASE_ELIXIR,
-    NEXT_LEVEL,
-    NEXT_FIGHT,
+    PURCHASE,
+    NLEVEL, // NEXT_LEVEL
+    NFIGHT, // NEXT_FIGHT
     ATTACK,
-    DEFENSE
+    DEFENSE,
+    ELIXIR
 }

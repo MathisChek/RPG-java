@@ -5,5 +5,8 @@ public class GameManager {
         } else {
             System.out.println("💀 Game Over ! Vous avez perdu...");
         }
+
+        System.out.println("🎮 Merci d'avoir joué !");
+        System.exit(0); // 🔹 Termine le programme proprement
     }
 }

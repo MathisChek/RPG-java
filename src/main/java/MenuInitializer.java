@@ -15,19 +15,21 @@ public class MenuInitializer {
         switch (menuType){
             case COMBAT:
                 menuItems.add(new MenuItem(1, "⚔️ Combattre", "fight"));
-                menuItems.add(new MenuItem(2, "🧪 Utiliser un élixir", "useElixir", false));
+                menuItems.add(new MenuItem(2, "🧪 Utiliser un élixir", "elixir"));
                 menuItems.add(new MenuItem(3, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(4, "🏃 Prendre la fuite", "escape"));
                 break;
             case COMBAT_END:
+                menuItems.add(new MenuItem(1, "\uD83D\uDCDC Détails du Héro", "infos"));
                 menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
-                menuItems.add(new MenuItem(3, "⚔️ Passer au prochain combat", "next_fight"));
+                menuItems.add(new MenuItem(3, "⚔️ Passer au prochain combat", "nfight"));
                 break;
             case LEVEL_END:
+                menuItems.add(new MenuItem(1, "\uD83D\uDCDC Détails du Héro", "infos"));
                 menuItems.add(new MenuItem(1, "💤 Se reposer", "rest"));
                 menuItems.add(new MenuItem(2, "🛒 Acheter un élixir", "purchase"));
-                menuItems.add(new MenuItem(3, "➡️ Passer au prochain niveau", "next_level")); // 🏆 Action pour changer de niveau
+                menuItems.add(new MenuItem(3, "➡️ Passer au prochain niveau", "nlevel")); // 🏆 Action pour changer de niveau
                 break;
             case SKILL_SELECTION:
                 menuItems.add(new MenuItem(1, "⚔️ Attaque → Dégâts augmentés", "attack"));

@@ -13,6 +13,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
     private int experience;
     private int restCount;
     private int coins;
+    private int elixir;
 
     protected int attackSkillsNumber, defenseSkillsNumber;
 
@@ -31,6 +32,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         this.attackManager = new AttackManager(this);
         this.restCount = 5; // Chaque personnage peut se reposer 5 fois avant de devoir acheter des items pour se reposer ou récupérer de la vie
         this.coins = coins;
+        this.elixir = 0;
     }
 
     /**
@@ -123,6 +125,12 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      * @param restCount, nombre de repos disponible pour le personnage
      */
     public void setRestCount(int restCount) { this.restCount = restCount; }
+
+    /**
+     * <p>Méthode destinée à définir le nombre de repos encore disponible pour le personnage </p>
+     */
+    public void resetRestCount() { this.restCount = 5; }
+
 
     /**
      * <p>Méthode destinée à savoir si unn personnage possède toujours des repos </p>
@@ -223,7 +231,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
         * 🎖️ XP : %s%d%s
         * \uD83D\uDCB0 Coins : %s%d%s
         * 📜️ Compétences :%s%s%s
-        * 🎒 Équipements : %s%s%s
+        * 🎒 Équipements : %s%s: %d%s
         * 📍 Position: %s[X:%d, Y:%d]%s
         %s****************************************%s
         """;
@@ -236,7 +244,7 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
                 YELLOW, this.experience, RESET,  // XP avec couleur
                 YELLOW, this.coins, RESET,
                 BLUE, this.attackManager.attacks(), RESET,  // Compétences
-                BLUE, "à implémenter", RESET,  // Équipements
+                BLUE, "elixir", this.elixir, RESET,  // Équipements
                 BLUE, 0, 0, RESET,  // Position
                 CYAN, RESET  // Fin du cadre
         );
@@ -279,5 +287,27 @@ public abstract class Character { // Classe abstraite (car non instantiable) imp
      */
     public int defend(Attack attack) {
         return calculateDamage(attack, false);
+    }
+
+    /**
+     * <p>Méthode destinée à récupérer le nombre d'elixir disponible du personnage </p>
+     * @return Nombre d'elixir disponible
+     */
+    public int getElixir() {
+        return elixir;
+    }
+
+    /**
+     * <p>Méthode destinée ajouter un elixir au personnage </p>
+     */
+    public void addElixir() {
+        this.elixir++;
+    }
+
+    /**
+     * <p>Méthode destinée retirer un elixir au personnage </p>
+     */
+    public void decreaseElixir() {
+        this.elixir--;
     }
 }

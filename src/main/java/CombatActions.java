@@ -37,7 +37,7 @@ public class CombatActions {
         // Vérification de la fin du combat
         if (player.isDead()) {
             System.out.println("\n❌ " + RED + player.getName() + " a été vaincu... 💀" + RESET + "\n");
-            isOngoing = false;
+            GameManager.gameOver(false);
         } else if (enemy.isDead()) {
             System.out.println("\n🏆 " + GREEN + enemy.getName() + " est vaincu ! " + player.getName() + " gagne de l'expérience ! ✨" + RESET + "\n");
             player.increaseExperience(enemy.getExperience());
@@ -60,5 +60,16 @@ public class CombatActions {
             }
         }
         return isOngoing;
+    }
+
+    public void elixir(Player player) {
+        if (player.getElixir() <= 0){
+            System.out.println("❌ Vous n'avez plus assez d'elixir ! Finissez votre match pour aller en racheter !\n");
+        } else {
+            int soin = (int) (player.getMaxHealth() * 0.2) + (int) (player.getExperience() * 0.05);
+            player.setHealth(Math.min(player.getHealth() + soin, player.getMaxHealth()));
+            System.out.println("Tu récupères " + soin + " PV !");
+            System.out.println("PV après élixir : " + player.getHealth() + "/" + player.getMaxHealth());
+        }
     }
 }

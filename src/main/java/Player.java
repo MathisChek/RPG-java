@@ -1,5 +1,5 @@
 public class Player extends Character {
-    private static final int MAX_HEALTH = 100;
+    private static final int MAX_HEALTH = 500;
     private static final int EXPERIENCE = 0;
     private static final int SKILLS_NUMBER = 0;
 

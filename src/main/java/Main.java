@@ -23,13 +23,13 @@ public class Main {
         // 🔹 Création du personnage principale
         Player player = CharacterFactory.createPlayer("Joueur");
 
-        System.out.println(story.getLevelsNumber());
-
         while (!story.isLastLevel()) {
             System.out.println("Niveau " + (story.getCurrentLevelNumber() + 1) + " : " + story.getCurrentLevel().getTitle());
-            System.out.println("Histoire " + story.getCurrentLevel().getIntro());
+            System.out.println(story.getCurrentLevel().getIntro());
 
             ActionType choice = menu.exec(scanner);
+
+            System.out.println(story.getCurrentLevel().getSpecialization()); if (story.getCurrentLevel().getSpecialization() != null);
             player.specialize(choice);
 
             while (story.getCurrentLevel().hasRemainingEnemies()) { // 🔹 Tant qu'il y a des ennemis
@@ -50,49 +50,69 @@ public class Main {
             System.out.println(story.getCurrentLevel().getOutro());
             handleLevelEndMenu(player, story, scanner); // 🔹 Ajoute un menu de fin de niveau
         }
+        System.out.println("helo");
     }
 
     public static void handleCombatEndMenu(Player player, Story story, Scanner scanner) {
         System.out.println("\n🏆 Le combat est terminé !");
         System.out.println("Que voulez-vous faire ?");
 
-        // 🔹 Choisir le bon menu en fonction des ennemis restants
         MenuType menuType = story.getCurrentLevel().hasRemainingEnemies() ? MenuType.COMBAT_END : MenuType.LEVEL_END;
         MenuInitializer menuInitializer = new MenuInitializer(menuType);
         ActionsMenu actionsMenu = new ActionsMenu("choisir une action", menuInitializer.getMenuItems());
 
-        // 🔹 Afficher et récupérer l'action choisie
-        ActionType choice = actionsMenu.exec(scanner);
-
-        // 🔹 Exécuter l’action avec `ActionManager`
+        ActionType choice;
         ActionManager actionManager = new ActionManager();
 
-        // 🔹 Vérifier si l'action nécessite `isOngoing`
-        if (choice == ActionType.FIGHT || choice == ActionType.REST || choice == ActionType.ESCAPE) {
+        do {
+            choice = actionsMenu.exec(scanner);
             boolean isOngoing = actionManager.executeAction(choice, player, story, true);
 
-            // 🔄 Si l'action continue le combat, on rappelle le menu
-            if (isOngoing) {
-                handleCombatEndMenu(player, story, scanner);
+            // 🔹 Si l'action est NEXT_FIGHT, on continue le combat immédiatement
+            if (choice == ActionType.NFIGHT) {
+                break;
             }
-        } else {
-            actionManager.executeAction(choice, player, story);
-        }
+
+            // 🔄 Tant que l'action n'est pas NEXT_FIGHT, on redemande un choix
+        } while (choice != ActionType.NFIGHT);
+
+        System.out.println("📢 Vous passez au combat suivant !");
     }
 
     public static void handleLevelEndMenu(Player player, Story story, Scanner scanner) {
         System.out.println("\n🏁 Vous avez terminé ce niveau !");
+
+        // ✅ Vérification après l'affichage du message pour éviter de montrer le menu après le boss final
+        if ((story.getCurrentLevelNumber() + 1) == story.getLevelsNumber()) {
+            System.out.println("🏆 Vous avez terminé l'aventure !");
+            GameManager.gameOver(true);
+            return; // 🔹 Quitte immédiatement la méthode pour éviter l'affichage du menu
+        }
+
         System.out.println("Que voulez-vous faire ?");
+
+        player.resetRestCount();
 
         // 🔹 Création du menu de fin de niveau
         MenuInitializer menuInitializer = new MenuInitializer(MenuType.LEVEL_END);
         ActionsMenu levelEndMenu = new ActionsMenu("choisir une action", menuInitializer.getMenuItems());
 
-        // 🔹 Afficher et récupérer l'action choisie
-        ActionType choice = levelEndMenu.exec(scanner);
-
         // 🔹 Exécuter l’action avec `ActionManager`
         ActionManager actionManager = new ActionManager();
-        actionManager.executeAction(choice, player, story);
+
+        boolean finishedActions = false;
+
+        while (!finishedActions) {
+            // 🔹 Afficher et récupérer l'action choisie
+            ActionType choice = levelEndMenu.exec(scanner);
+
+            // 🔹 Si le joueur choisit NEXT_LEVEL, on sort de la boucle et passe au niveau suivant
+            if (choice == ActionType.NLEVEL) {
+                actionManager.executeAction(choice, player, story); // 🔹 Passe au niveau suivant
+                finishedActions = true;
+            } else {
+                actionManager.executeAction(choice, player, story);
+            }
+        }
     }
 }
